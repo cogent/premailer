@@ -130,7 +130,7 @@ class Premailer
         unless styles.empty?
           style_tag = "<style type=\"text/css\">\n#{styles}></style>"
           if body = doc.search('body')
-            doc.at_css('body').children.first.before(style_tag)            
+            doc.at_css('body').children.first.before(style_tag)
           else
             doc.inner_html = style_tag += doc.inner_html
           end
@@ -188,12 +188,11 @@ class Premailer
 
         doc = nil
 
-        # Default encoding is ASCII-8BIT (binary) per http://groups.google.com/group/nokogiri-talk/msg/0b81ef0dc180dc74
         if thing.is_a?(String) and RUBY_VERSION =~ /1.9/
-          thing = thing.force_encoding('ASCII-8BIT').encode!
+          thing = thing.force_encoding(@options[:input_encoding]).encode!
           doc = ::Nokogiri::HTML(thing) {|c| c.recover }
         else
-          doc = ::Nokogiri::HTML(thing, nil, @options[:inputencoding] || 'BINARY') {|c| c.recover }
+          doc = ::Nokogiri::HTML(thing, nil, @options[:input_encoding] || 'BINARY') {|c| c.recover }
         end
 
         return doc
